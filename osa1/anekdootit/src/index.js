@@ -18,7 +18,7 @@ const App = (props) => {
     if(maxVote < props.votes[selected] == true) {
         maxVote = props.votes[selected]
         setHighest(selected)
-    }
+    } 
   }
   
   const Randomize = () => () => {
