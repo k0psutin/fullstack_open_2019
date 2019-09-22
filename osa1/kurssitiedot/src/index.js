@@ -43,8 +43,9 @@ const Total = (parts) => {
 }
 
 const App = () => {
-    const course = 'Half Stack application development'
-    const parts = [
+    const course = {
+    name: 'Half Stack application development',
+    parts: [
     {
         name: 'Fundamendals of React',
         exercises: 10
@@ -57,17 +58,14 @@ const App = () => {
         name: 'State of a component',
         exercises: 14
     }
-]
+   ]
+ }
 
-console.log('Osa: ' + parts[0].name)
-console.log('Harjoitukset: ' + parts[0].exercises)
-
-    
     return (
         <div>
-            <Header name={course}/>
-            <Content parts={parts}/>
-            <Total parts={parts}/>
+            <Header name={course.name}/>
+            <Content parts={course.parts}/>
+            <Total parts={course.parts}/>
         </div>
     )
 }
