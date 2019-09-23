@@ -14,13 +14,13 @@ const Weather = ( {query} ) => {
      .get(cityWeather)
      .then(response => {
        const wth = response.data
-       
+
        setCity(wth.location.name)
        setTemperature(wth.current.temperature)
        setPic(wth.current.weather_icons[0])
        setWind(`${wth.current.wind_speed} kph direction ${wth.current.wind_dir}`)
      })
-    },[])
+    },[cityWeather])
 
     return(
         <div>

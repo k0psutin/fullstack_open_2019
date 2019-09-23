@@ -24,7 +24,6 @@ const Country = ( {filter, countries} ) => {
                <p key={country.name}>{country.name}</p>)
             )
             } else {
-                console.log(countriesToShow)
                 return (
                     countriesToShow.map(country => 
                         <div key={country.name}>
@@ -47,5 +46,4 @@ const Country = ( {filter, countries} ) => {
         </div>
     )
 }
-
 export default Country
