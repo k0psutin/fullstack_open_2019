@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Entry from './Entry'
+import Weather from './Weather'
 
 const Country = ( {filter, countries} ) => {
     const [match] = useState(false)
@@ -32,7 +33,8 @@ const Country = ( {filter, countries} ) => {
                             <Entry key={country.population} first="population" second={country.population} />
                             <h3>languages</h3>
                              <Languages country={country}/>
-                            <p> <img height="100" width="100" alt={country.name} src={country.flag}></img></p>
+                            <p> <img height="75" width="100" alt={country.name} src={country.flag}></img></p>
+                            <Weather query={country.capital} />
                         </div>
                     )
                 )

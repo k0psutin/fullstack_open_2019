@@ -4,7 +4,7 @@ import axios from 'axios'
 import Query from './components/Query'
 import Country from './components/Country'
 
-function App() {
+const App = () => {
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
 
