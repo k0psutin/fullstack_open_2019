@@ -11,16 +11,21 @@ const App = () => {
 
   const addNewPerson = (event) => {
   // '${newName} is already added to phonebook'
-
+    
     event.preventDefault()
-    console.log('Lisätään uusi nimi:', event.target.value)
+
+    console.log('Lisätään uusi nimi:', newName)
     const personObject = {
       name: newName,
     }
 
-    console.log('Luotu:', personObject)
-    setPersons(persons.concat(personObject))
-    setNewName('')
+    if(!persons.some(person => person.name === newName)) {
+      console.log('Luotu:', personObject)
+      setPersons(persons.concat(personObject))
+      setNewName('')
+    } else {
+      alert(`${newName} is already added to phonebook`)
+    }
   }
   
 
