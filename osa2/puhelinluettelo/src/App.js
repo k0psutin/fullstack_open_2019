@@ -33,7 +33,6 @@ const App = () => {
       alert(`${newName} is already added to phonebook`)
     }
   }
-  
 
   const handleNewPerson = (event) => {
     console.log('Syötetään uutta nimeä:', event.target.value)
