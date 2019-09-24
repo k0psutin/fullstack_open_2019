@@ -11,7 +11,6 @@ const App = () => {
   const [ filter, setFilter ] = useState('')
 
   useEffect(() => {
-    console.log('effect')
     phonebook
       .getAll()
       .then(initialPersons => {
@@ -19,13 +18,12 @@ const App = () => {
       })
   }, [])
 
-
   const addNewPerson = (event) => {
     event.preventDefault()
     console.log('Lisätään uusi nimi:', newName)
     const personObject = {
       name: newName,
-      number: newNumber
+      number: newNumber,
     }
 
     if(!persons.some(person => person.name === newName)) {
@@ -43,8 +41,25 @@ const App = () => {
     }
   }
 
+  const handleRemoval = (id) => {
+    const personObject = persons.find(n => n.id === id)
+    let rmv = window.confirm(`Remove ${personObject.name} ?`)
+    if(rmv) {
+      console.log(`Pääsi tarkistuksesta`)
+      phonebook
+      .remove(id, personObject)
+      .then(() => {
+         console.log(`Poistettu id: ${id}`)
+         phonebook.getAll()
+          .then(newPersons => {
+             setPersons(newPersons.map(person => person.id !== id ? person: newPersons))
+             console.log(`Haettu uusi lista`, newPersons)
+          })
+      })
+    }    
+  }
+
   const handleNewPerson = (event) => {
-    console.log('Syötetään uutta nimeä:', event.target.value)
     setNewName(event.target.value)
   }
 
@@ -75,6 +90,7 @@ const App = () => {
       <Persons 
         persons={persons}
         filter={filter}
+        handleRemoval={handleRemoval}
       />
     </div>
   )
