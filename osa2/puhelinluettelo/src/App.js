@@ -3,12 +3,15 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import phonebook from './services/phonebook'
+import './index.css'
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
+  const [ statusMessage, setStatusMessage ] = useState(null)
+  const [ statusColor, setStatusColor ] = useState('done')
 
   useEffect(() => {
     phonebook
@@ -34,6 +37,12 @@ const App = () => {
          setPersons(persons.concat(returnedPerson))
          setNewName('')
          setNewNumber('')
+         
+         setStatusColor('done')
+         setStatusMessage(`Added ${newName}`)
+         setTimeout(() => {
+           setStatusMessage(null)
+         }, 5000)
        })
       
     } else {
@@ -52,10 +61,19 @@ const App = () => {
             setPersons(persons.map(n => n.id !== changedPerson.id ? n : returnedPerson))
           }).catch(error => {
              console.log(error)
+             setStatusColor('error')
+             setStatusMessage(`${newName} was already removed from server`)
+             setTimeout(() => {
+             setStatusMessage(null)
+             }, 5000)
              setPersons(persons.filter(n => n.id !== changedPerson.id))
              
           })
-
+          setStatusColor('done')
+          setStatusMessage(`Changed ${newName} number to ${newNumber}`)
+          setTimeout(() => {
+            setStatusMessage(null)
+          }, 5000)
           setNewName('')
           setNewNumber('')
       }
@@ -73,9 +91,22 @@ const App = () => {
          console.log(`Poistettu id: ${id}`)
          phonebook.getAll()
           .then(newPersons => {
+            setStatusColor('done')
+            setStatusMessage(`Succesfully removed ${personObject.name} from phonebook.`)
+            setTimeout(() => {
+            setStatusMessage(null)
+             }, 5000)
              setPersons(newPersons.map(person => person.id !== id ? person: newPersons))
              console.log(`Haettu uusi lista`, newPersons)
           })
+      }).catch(error => {
+        console.log(`Handle removal error`)
+        setStatusColor('error')
+        setStatusMessage(`Information ${personObject.name} has already been removed from server`)
+        setTimeout(() => {
+          setStatusMessage(null)
+        }, 5000)
+        setPersons(persons.filter(n => n.id !== persons.id))
       })
     }    
   }
@@ -92,9 +123,22 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  const Status = ({ message }) => {
+    if (message === null) {
+      return null
+    }
+
+    return(
+      <div className={statusColor}>
+        {message}
+      </div>
+    )
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
+      <Status message={statusMessage} />
       <Filter 
         filter={filter} 
         handleFilter={handleFilter}
