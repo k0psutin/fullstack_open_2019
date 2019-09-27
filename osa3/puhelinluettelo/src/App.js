@@ -33,15 +33,13 @@ const App = () => {
       //console.log('Luotu:', personObject)
       phonebook
        .create(personObject)
-       .then(() => {
-         phonebook.getAll()
-         .then(newPhonelist => {
-           setPersons(newPhonelist)
-         })
-
+       .then(returnedPerson => {
+         setPersons(persons.concat(returnedPerson))
          setNewName('')
          setNewNumber('')
        })
+
+     
 
        setStatusColor('done')
          setStatusMessage(`Added ${newName}`)
