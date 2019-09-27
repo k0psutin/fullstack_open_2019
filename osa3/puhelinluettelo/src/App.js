@@ -29,23 +29,24 @@ const App = () => {
       number: newNumber,
     }
 
-    if(!persons.some(person => person.name === newName)) {
+    if(!persons.find(person => person.name === newName)) {
       //console.log('Luotu:', personObject)
       phonebook
        .create(personObject)
-       .then(returnedPerson => {
-         setPersons(persons.concat(returnedPerson))
+       .then(newPerson => {
+         //console.log("addnewPerson .create(personObject)", newPerson)
+         setPersons(persons.concat(newPerson))
          setNewName('')
          setNewNumber('')
-       })
 
-     
-
-       setStatusColor('done')
+         setStatusColor('done')
          setStatusMessage(`Added ${newName}`)
          setTimeout(() => {
            setStatusMessage(null)
          }, 5000)
+       })
+
+         
       
     } else {
       let replace = window.confirm(`${newName} is already added to phonebook.
@@ -93,14 +94,14 @@ const App = () => {
          //console.log(`Poistettu id: ${id}`)
          phonebook.getAll()
           .then(newPersons => {
-            setStatusColor('done')
-            setStatusMessage(`Succesfully removed ${personObject.name} from phonebook.`)
-            setTimeout(() => {
-            setStatusMessage(null)
-             }, 5000)
              setPersons(newPersons.map(person => person.id !== id ? person: newPersons))
              //console.log(`Haettu uusi lista`, newPersons)
           })
+          setStatusColor('done')
+          setStatusMessage(`Succesfully removed ${personObject.name} from phonebook.`)
+          setTimeout(() => {
+          setStatusMessage(null)
+             }, 5000)
       }).catch(error => {
         //console.log(`Handle removal error`)
         setStatusColor('error')
