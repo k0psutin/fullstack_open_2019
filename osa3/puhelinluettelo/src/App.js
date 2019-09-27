@@ -23,14 +23,14 @@ const App = () => {
 
   const addNewPerson = (event) => {
     event.preventDefault()
-    console.log('Lisätään uusi nimi:', newName)
+    //console.log('Lisätään uusi nimi:', newName)
     const personObject = {
       name: newName,
       number: newNumber,
     }
 
     if(!persons.some(person => person.name === newName)) {
-      console.log('Luotu:', personObject)
+      //console.log('Luotu:', personObject)
       phonebook
        .create(personObject)
        .then(() => {
@@ -38,7 +38,7 @@ const App = () => {
          .then(newPhonelist => {
            setPersons(newPhonelist)
          })
-         
+
          setNewName('')
          setNewNumber('')
        })
@@ -57,7 +57,7 @@ const App = () => {
         const person = persons.find(n => n.name === newName)
         const changedPerson = { ...person, number: newNumber}
 
-        console.log(`changedNumber:`, changedPerson)
+        //console.log(`changedNumber:`, changedPerson)
         
         phonebook
           .update(changedPerson.id, changedPerson)
@@ -88,11 +88,11 @@ const App = () => {
     const personObject = persons.find(n => n.id === id)
     let rmv = window.confirm(`Remove ${personObject.name} ?`)
     if(rmv) {
-      console.log(`Pääsi tarkistuksesta`)
+      //console.log(`Pääsi tarkistuksesta`)
       phonebook
       .remove(id, personObject)
       .then(() => {
-         console.log(`Poistettu id: ${id}`)
+         //console.log(`Poistettu id: ${id}`)
          phonebook.getAll()
           .then(newPersons => {
             setStatusColor('done')
@@ -101,10 +101,10 @@ const App = () => {
             setStatusMessage(null)
              }, 5000)
              setPersons(newPersons.map(person => person.id !== id ? person: newPersons))
-             console.log(`Haettu uusi lista`, newPersons)
+             //console.log(`Haettu uusi lista`, newPersons)
           })
       }).catch(error => {
-        console.log(`Handle removal error`)
+        //console.log(`Handle removal error`)
         setStatusColor('error')
         setStatusMessage(`Information ${personObject.name} has already been removed from server`)
         setTimeout(() => {
