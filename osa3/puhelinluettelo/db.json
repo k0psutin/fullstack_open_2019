@@ -1,0 +1,19 @@
+{
+  "persons": [
+    {
+      "name": "Arto Hellas",
+      "number": "040-987665",
+      "id": 2
+    },
+    {
+      "name": "Ada Lovelace",
+      "number": "044-3838383",
+      "id": 5
+    },
+    {
+      "name": "Asa Basa",
+      "number": "3242342",
+      "id": 6
+    }
+  ]
+}
