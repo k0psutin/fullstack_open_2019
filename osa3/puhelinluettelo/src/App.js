@@ -21,30 +21,34 @@ const App = () => {
       })
   }, [])
 
+  const handleStatus = ( color, message ) => {
+    setStatusColor(color)
+    setStatusMessage(message)
+    setTimeout(() => {
+      setStatusMessage(null)
+    }, 5000)
+}
+
   const addNewPerson = (event) => {
     event.preventDefault()
-    //console.log('Lisätään uusi nimi:', newName)
     const personObject = {
       name: newName,
       number: newNumber,
     }
 
     if(!persons.find(person => person.name === newName)) {
-      //console.log('Luotu:', personObject)
       phonebook
        .create(personObject)
        .then(newPerson => {
-         //console.log("addnewPerson .create(personObject)", newPerson)
          setPersons(persons.concat(newPerson))
          setNewName('')
          setNewNumber('')
 
-         setStatusColor('done')
-         setStatusMessage(`Added ${newName}`)
-         setTimeout(() => {
-           setStatusMessage(null)
-         }, 5000)
+         handleStatus('done', `Added ${newName}`)
        })
+        .catch(error => {
+          handleStatus('error', `${error.response.data.error}`)
+        })
 
          
       
@@ -56,27 +60,15 @@ const App = () => {
         const person = persons.find(n => n.name === newName)
         const changedPerson = { ...person, number: newNumber}
 
-        //console.log(`changedNumber:`, changedPerson)
-        
         phonebook
           .update(changedPerson.id, changedPerson)
           .then(returnedPerson => {
             setPersons(persons.map(n => n.id !== changedPerson.id ? n : returnedPerson))
-          }).catch(error => {
-             console.log(error)
-             setStatusColor('error')
-             setStatusMessage(`${newName} was already removed from server`)
-             setTimeout(() => {
-             setStatusMessage(null)
-             }, 5000)
+          }).catch(() => {
+             handleStatus(`error`, `${newName} was already removed from server`)
              setPersons(persons.filter(n => n.id !== changedPerson.id))
-             
           })
-          setStatusColor('done')
-          setStatusMessage(`Changed ${newName} number to ${newNumber}`)
-          setTimeout(() => {
-            setStatusMessage(null)
-          }, 5000)
+          handleStatus('done',`Changed ${newName} number to ${newNumber}`)
           setNewName('')
           setNewNumber('')
       }
@@ -87,28 +79,16 @@ const App = () => {
     const personObject = persons.find(n => n.id === id)
     let rmv = window.confirm(`Remove ${personObject.name} ?`)
     if(rmv) {
-      //console.log(`Pääsi tarkistuksesta`)
       phonebook
       .remove(id, personObject)
       .then(() => {
-         //console.log(`Poistettu id: ${id}`)
          phonebook.getAll()
           .then(newPersons => {
              setPersons(newPersons.map(person => person.id !== id ? person: newPersons))
-             //console.log(`Haettu uusi lista`, newPersons)
           })
-          setStatusColor('done')
-          setStatusMessage(`Succesfully removed ${personObject.name} from phonebook.`)
-          setTimeout(() => {
-          setStatusMessage(null)
-             }, 5000)
-      }).catch(error => {
-        //console.log(`Handle removal error`)
-        setStatusColor('error')
-        setStatusMessage(`Information ${personObject.name} has already been removed from server`)
-        setTimeout(() => {
-          setStatusMessage(null)
-        }, 5000)
+          handleStatus('done', `Succesfully removed ${personObject.name} from phonebook.`)
+      }).catch(() => {
+        handleStatus('error', `Information ${personObject.name} has already been removed from server`)
         setPersons(persons.filter(n => n.id !== persons.id))
       })
     }    
