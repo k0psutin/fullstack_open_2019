@@ -2,11 +2,6 @@ import React, { useState }  from 'react'
 import Entry from './Entry'
 
 const Persons = ( {filter, persons, handleRemoval} ) => {
-   /*
-    console.log(filter)
-    console.log(persons)
-    console.log(handleRemoval)
-    */
 
     const [ match ] = useState(false)
 
