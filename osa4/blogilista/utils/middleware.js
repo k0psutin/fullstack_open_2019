@@ -1,7 +1,7 @@
 const morgan = require('morgan')
+const logger = require('./logger')
 
 const stringFormat = ':method :url :status :req[content-length] :response-time ms - :post'
-
 const requestLogger = morgan(stringFormat)
 
 morgan.token('post', function (req, res) {
@@ -18,7 +18,7 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
+  logger.error(error.message)
 
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return response.status(400).send({
