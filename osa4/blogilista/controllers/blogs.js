@@ -28,13 +28,15 @@ blogsRouter.delete('/:id', async (request, response, next) => {
   }
 })
 
-blogsRouter.put('/:id', (request, response, next) => {
-  Blog.findByIdAndUpdate(request.params.id, request.body)
-    .then(updatedBlog => {
-      response.json(updatedBlog.toJSON())
-    })
-    .catch(error => next(error))
+blogsRouter.put('/:id', async (request, response, next) => {
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, request.body)
+    response.json(updatedBlog.toJSON())
+  } catch(exception) {
+    next(exception)
+  }
 })
+
 
 blogsRouter.post('/', async (request, response, next) => {
   const blog = new Blog(request.body)
