@@ -3,7 +3,7 @@ const listHelper = require('../utils/list_helper')
 describe('Dummy tests', () => {
   test('dummy returns one', () => {
     const blogs = []
-      
+
     const result = listHelper.dummy(blogs)
     expect(result).toBe(1)
   })
@@ -57,7 +57,7 @@ const bigBlogList = [
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
     likes: 2,
     __v: 0
-  }  
+  }
 ]
 
 describe('total likes', () => {
@@ -67,17 +67,14 @@ describe('total likes', () => {
   })
 })
 
-
 describe('most likes', () => {
- 
   test('of all authors', () => {
     const result = listHelper.mostLikes(bigBlogList)
-    const expectedResult = 
-      {
-        author: 'Edsger W. Dijkstra',
-        likes: 17
-      }
-      
+    const expectedResult = {
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    }
+
     expect(result).toEqual(expectedResult)
   })
 })
@@ -93,7 +90,7 @@ describe('favorite blog', () => {
     ]
 
     const result = listHelper.mostFavoriteBlog(bigBlogList)
-    
+
     expect(result).toEqual(expectedResult)
   })
 })
@@ -108,7 +105,7 @@ describe('most blogs', () => {
     ]
 
     const result = listHelper.mostBlogs(bigBlogList)
-    
+
     expect(result).toEqual(expectedResult)
   })
 })

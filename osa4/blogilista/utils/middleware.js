@@ -4,9 +4,9 @@ const logger = require('./logger')
 const stringFormat = ':method :url :status :req[content-length] :response-time ms - :post'
 const requestLogger = morgan(stringFormat)
 
-morgan.token('post', function (req, res) {
-  //console.log(`morgan.token('post'):`, req.body)
-  if(req.body.author != undefined | req.body.url != undefined | req.body.likes != undefined) {
+morgan.token('post', function(req) {
+  // console.log(`morgan.token('post'):`, req.body)
+  if (req.body.author !== undefined || req.body.url !== undefined || req.body.likes !== undefined) {
     return JSON.stringify({ author: req.body.author, url: req.body.url, likes: req.body.likes })
   }
 })
@@ -24,7 +24,8 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).send({
       error: 'malformatted id'
     })
-  } else if (error.name === 'ValidationError') {
+  }
+  if (error.name === 'ValidationError') {
     return response.status(400).json({
       error: error.message
     })
@@ -33,9 +34,8 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-
 module.exports = {
   requestLogger,
   unknownEndpoint,
-  errorHandler,
+  errorHandler
 }

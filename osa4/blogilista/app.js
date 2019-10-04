@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const blogsRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
 const config = require('./utils/config')
 const mongoose = require('mongoose')
 const middleware = require('./utils/middleware')
@@ -10,15 +11,16 @@ const logger = require('./utils/logger')
 
 logger.info('connecting to', config.MONGODB_URI)
 
-mongoose.connect(config.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false
-})
+mongoose
+  .connect(config.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+  })
   .then(() => {
     logger.info('connected to MongoDB')
   })
-  .catch((error) => {
+  .catch(error => {
     logger.info('error connecting to MongoDB:', error.message)
   })
 
@@ -30,8 +32,8 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(middleware.requestLogger)
 }
 
-
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
