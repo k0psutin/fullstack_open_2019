@@ -4,6 +4,7 @@ const User = require('../models/user')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
+
   response.json(blogs.map(blog => blog.toJSON()))
 })
 
@@ -44,8 +45,8 @@ blogsRouter.post('/', async (request, response, next) => {
   const user = await User.findOne()
 
   const blog = new Blog({
-    author: body.author,
     title: body.title,
+    author: body.author,
     url: body.url,
     likes: body.likes,
     user: user._id

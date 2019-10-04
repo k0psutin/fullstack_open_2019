@@ -1,11 +1,14 @@
 const express = require('express')
+
 const app = express()
+// eslint-disable-next-line import/no-extraneous-dependencies
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const mongoose = require('mongoose')
 const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
 const config = require('./utils/config')
-const mongoose = require('mongoose')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 
@@ -15,7 +18,8 @@ mongoose
   .connect(config.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useCreateIndex: true
   })
   .then(() => {
     logger.info('connected to MongoDB')
@@ -32,6 +36,7 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(middleware.requestLogger)
 }
 
+app.use('/api/login', loginRouter)
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 
