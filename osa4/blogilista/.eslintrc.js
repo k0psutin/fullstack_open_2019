@@ -18,6 +18,7 @@ module.exports = {
     'prettier/prettier': ['error'],
     'no-underscore-dangle': 'off',
     'no-param-reassign': 'off',
-    'func-names': 'off'
+    'func-names': 'off',
+    'prefer-destructuring': 'off'
   }
 }
