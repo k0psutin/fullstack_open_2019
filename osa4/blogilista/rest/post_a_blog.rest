@@ -1,9 +1,10 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
+
 {
-    "title": "Jåå",
-    "author": "Patrick Johansson",
+    "title": "Token based Authorization 2",
+    "author": "Pate Mustajärvi 2",
     "url": "http://årp.fi",
-    "likes": 10
+    "likes": 0
 }
