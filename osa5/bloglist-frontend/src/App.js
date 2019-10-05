@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './app.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
+  const [error, setError] = useState('done')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -30,6 +32,7 @@ const App = () => {
   }, [])
 
   const handleLogOut = () => {
+    createNotification(`succesfully logged out`, 'done')
     window.localStorage.clear()
     setUser(null)
   }
@@ -47,8 +50,10 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      createNotification('log in successful', 'done')
       console.log('loggin in with', user)
     } catch (exception) {
+      createNotification(`wrong username or password`, 'error')
       console.log(`wrong credentials`)
     }
   }
@@ -59,6 +64,7 @@ const App = () => {
     return (
       <div>
         <h1>Blogs</h1>
+        {notification()}
         <h2>log in to application</h2>
         <form onSubmit={handleLogin}>
           <div>
@@ -89,6 +95,7 @@ const App = () => {
     return (
       <div>
         <h1>blogs</h1>
+        {notification()}
         <p>
           {user.name} logged in{' '}
           <button onClick={() => handleLogOut()}>log out</button>
@@ -122,6 +129,7 @@ const App = () => {
 
     blogService.create(blogObject).then(data => {
       setBlogs(blogs.concat(data))
+      createNotification(`a new blog ${title}`, 'done')
       setTitle('')
       setAuthor('')
       setUrl('')
@@ -159,6 +167,22 @@ const App = () => {
         </form>
       </div>
     )
+  }
+
+  const createNotification = (message, error) => {
+    setErrorMessage(message)
+    setError(error)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+
+  const notification = () => {
+    if (errorMessage === null) {
+      return null
+    }
+
+    return <div className={error}>{errorMessage}</div>
   }
 
   return <div>{user === null ? logInForm() : loggedIn()}</div>
