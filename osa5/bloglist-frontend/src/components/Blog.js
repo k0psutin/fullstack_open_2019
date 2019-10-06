@@ -1,11 +1,12 @@
-import React, { useState, useImperativeHandle } from 'react'
+import React, { useState } from 'react'
 import '../styles.css'
+import PropTypes from 'prop-types'
 
 const Delete = ({ handleRemoval, blog }) => (
   <button onClick={() => handleRemoval(blog)}>delete</button>
 )
 
-const Blog = ({ blog, handleLikes, handleRemoval, ref, user }) => {
+const Blog = ({ blog, handleLikes, handleRemoval, user }) => {
   const [visible, setVisible] = useState(false)
 
   const showBlog = { display: visible ? '' : 'none' }
@@ -15,12 +16,6 @@ const Blog = ({ blog, handleLikes, handleRemoval, ref, user }) => {
   }
 
   const id = blog.id
-
-  useImperativeHandle(ref, () => {
-    return {
-      toggleVisibility
-    }
-  })
 
   return (
     <div>
@@ -44,6 +39,13 @@ const Blog = ({ blog, handleLikes, handleRemoval, ref, user }) => {
       </div>
     </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleLikes: PropTypes.func.isRequired,
+  handleRemoval: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
 }
 
 export default Blog

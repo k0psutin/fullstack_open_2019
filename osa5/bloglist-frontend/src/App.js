@@ -35,7 +35,7 @@ const App = () => {
   }, [])
 
   const handleLogOut = () => {
-    createNotification(`succesfully logged out`, 'done')
+    createNotification('succesfully logged out', 'done')
     window.localStorage.clear()
     setUser(null)
   }
@@ -55,7 +55,7 @@ const App = () => {
       setPassword('')
       createNotification('log in successful', 'done')
     } catch (exception) {
-      createNotification(`wrong username or password`, 'error')
+      createNotification('wrong username or password', 'error')
     }
   }
 
