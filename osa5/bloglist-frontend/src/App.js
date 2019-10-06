@@ -5,7 +5,7 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import CreateNewBlog from './components/CreateNewBlog'
-import './app.css'
+import './styles.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -59,7 +59,50 @@ const App = () => {
     }
   }
 
-  const rows = () => blogs.map(blog => <Blog key={blog.id} blog={blog} />)
+  const handleLikes = async id => {
+    let blog = blogs.find(blog => blog.id === id)
+
+    blog.likes++
+
+    await blogService.update(id, blog)
+    setBlogs(blogs.map(n => (n.id !== blog.id ? n : blog)))
+  }
+
+  const handleRemoval = async blog => {
+    const confirm = window.confirm(`Delete ${blog.title} by ${blog.author}`)
+    const id = blog.id
+
+    if (confirm) {
+      try {
+        await blogService.remove(id)
+        setBlogs(blogs.filter(blog => blog.id !== id))
+        createNotification(`Blog ${blog.title} removed`, 'done')
+      } catch (exception) {
+        createNotification(
+          `You're not authorized to remove ${blog.title}`,
+          'error'
+        )
+      }
+    }
+  }
+
+  const rows = () => {
+    blogs.sort(function(a, b) {
+      if (a.likes > b.likes) return -1
+      if (a.likes < b.likes) return 1
+
+      return 0
+    })
+    return blogs.map(blog => (
+      <Blog
+        key={blog.id}
+        blog={blog}
+        handleRemoval={handleRemoval}
+        handleLikes={handleLikes}
+        user={user}
+      />
+    ))
+  }
 
   const loginForm = () => {
     return (
@@ -90,7 +133,7 @@ const App = () => {
     )
   }
 
-  const createNewBlog = event => {
+  const createNewBlog = async event => {
     event.preventDefault()
     blogFormRef.current.toggleVisibility()
     const blogObject = {
@@ -100,13 +143,13 @@ const App = () => {
       likes: 0
     }
 
-    blogService.create(blogObject).then(data => {
-      setBlogs(blogs.concat(data))
-      createNotification(`a new blog ${title}`, 'done')
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-    })
+    const newBlog = await blogService.create(blogObject)
+    console.log(newBlog)
+    setBlogs(blogs.concat(newBlog))
+    createNotification(`a new blog ${title}`, 'done')
+    setTitle('')
+    setAuthor('')
+    setUrl('')
   }
 
   const blogFormRef = React.createRef()
