@@ -100,6 +100,7 @@ const App = () => {
         handleRemoval={handleRemoval}
         handleLikes={handleLikes}
         user={user}
+        className="blog"
       />
     ))
   }
@@ -189,7 +190,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="main">
       <div>
         <h1>Blogs</h1>
         {notification()}

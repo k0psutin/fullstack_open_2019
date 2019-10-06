@@ -20,7 +20,7 @@ const Blog = ({ blog, handleLikes, handleRemoval, user }) => {
   return (
     <div>
       <div className="blogHeader" onClick={toggleVisibility}>
-        <div>
+        <div className="header">
           {blog.title} {blog.author}
         </div>
       </div>
