@@ -1,40 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const CreateNewBlog = ({
-  createNewBlog,
-  author,
-  title,
-  url,
-  handleTitle,
-  handleAuthor,
-  handleUrl
-}) => {
+const CreateNewBlog = ({ createNewBlog, author, title, url }) => {
   return (
     <div>
       <h2>create new</h2>
       <form name="blog" onSubmit={createNewBlog}>
         <div>
           title:
-          <input
-            type="text"
-            name="Title"
-            value={title}
-            onChange={handleTitle}
-          />
+          <input {...title} />
         </div>
         <div>
           author:
-          <input
-            type="text"
-            name="Author"
-            value={author}
-            onChange={handleAuthor}
-          />
+          <input {...author} />
         </div>
         <div>
           url:
-          <input type="text" name="Url" value={url} onChange={handleUrl} />
+          <input {...url} />
         </div>
         <button type="submit">create</button>
       </form>
