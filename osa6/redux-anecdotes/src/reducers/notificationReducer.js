@@ -18,10 +18,10 @@ export const getStatus = () => {
   }
 }
 
-export const addAnectode = notification => {
+export const showNotification = notification => {
   return {
     type: 'SET_STATUS',
-    data: `Added ${notification}`
+    data: `${notification}`
   }
 }
 
@@ -29,6 +29,16 @@ export const hideNotification = () => {
   return {
     type: 'HIDE_STATUS',
     data: ''
+  }
+}
+
+export const setNotification = (notification, time) => {
+  return async dispatch => {
+    dispatch(showNotification(notification))
+
+    setTimeout(() => {
+      dispatch(hideNotification())
+    }, time)
   }
 }
 

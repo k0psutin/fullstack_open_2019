@@ -7,8 +7,8 @@ const getAll = async () => {
   return response.data
 }
 
-const update = async content => {
-  const response = await axios.put(baseUrl, content)
+const update = async object => {
+  const response = await axios.put(`${baseUrl}/${object.id}`, object)
   return response.data
 }
 

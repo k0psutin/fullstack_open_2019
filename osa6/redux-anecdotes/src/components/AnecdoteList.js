@@ -1,17 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
-import { voteNotification } from '../reducers/notificationReducer'
-import { hideNotification } from '../reducers/notificationReducer'
+import { setNotification } from '../reducers/notificationReducer'
 import { anecdotesToShow } from '../reducers/anecdoteReducer'
 
 const AnecdoteList = props => {
-  const vote = content => {
-    props.voteAnecdote(content.id, content.content)
-    props.voteNotification(content.content)
-    setTimeout(() => {
-      props.hideNotification('')
-    }, 5000)
+  const vote = async content => {
+    props.voteAnecdote(content)
+    props.setNotification(`Voted for ${content.content}`, 5000)
   }
   return (
     <div>
@@ -31,9 +27,8 @@ const AnecdoteList = props => {
 
 const mapDispatchToProps = {
   voteAnecdote,
-  voteNotification,
-  hideNotification,
-  anecdotesToShow
+  anecdotesToShow,
+  setNotification
 }
 
 const mapStateToProps = state => {
@@ -41,8 +36,8 @@ const mapStateToProps = state => {
     anecdote: state.anecdote,
     filter: state.filter,
     anecdotesToShow: state.anecdote
-    // .sort((a, b) => b.votes - a.votes)
-    // .filter(anecdote => anecdote.content.includes(state.filter))
+      .sort((a, b) => b.votes - a.votes)
+      .filter(anecdote => anecdote.content.includes(state.filter))
   }
 }
 
