@@ -20,8 +20,7 @@ const asObject = anecdote => {
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
+  console.log('anecdoteReducer:', action.filter)
   switch (action.type) {
     case 'VOTE':
       const id = action.data.id
@@ -35,6 +34,10 @@ const reducer = (state = initialState, action) => {
       )
     case 'NEW_ANECDOTE':
       return [...state, action.data]
+
+    case 'FILTER':
+      const list = initialState
+      return list.filter(list => list.content.includes(action.filter))
 
     default:
       return state

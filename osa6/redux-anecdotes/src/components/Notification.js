@@ -1,16 +1,16 @@
 import React from 'react'
 
-const Notification = () => {
+const Notification = props => {
   const style = {
     border: 'solid',
     padding: 10,
     borderWidth: 1
   }
-  return (
-    <div style={style}>
-      render here notification...
-    </div>
-  )
+  const notification = props.store.getState().notification
+  const hide = () => <div></div>
+  const show = () => <div style={style}>{notification}</div>
+
+  return <div>{notification === '' ? hide() : show()}</div>
 }
 
 export default Notification

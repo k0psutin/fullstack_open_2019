@@ -1,13 +1,19 @@
 import React from 'react'
 import { createAnecdote } from '../reducers/anecdoteReducer'
+import { addAnectode } from '../reducers/notificationReducer'
+import { hideNotification } from '../reducers/notificationReducer'
 
-const AnecdoteForm = props => {
+const AnecdoteForm = ({ store }) => {
   const newAnecdote = event => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    console.log(props)
-    props.store.dispatch(createAnecdote(content))
+    console.log(store)
+    store.dispatch(createAnecdote(content))
+    store.dispatch(addAnectode(content))
+    setTimeout(() => {
+      store.dispatch(hideNotification())
+    }, 5000)
   }
   return (
     <div>
