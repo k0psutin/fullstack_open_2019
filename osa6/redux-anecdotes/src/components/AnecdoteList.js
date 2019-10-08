@@ -41,8 +41,8 @@ const mapStateToProps = state => {
     anecdote: state.anecdote,
     filter: state.filter,
     anecdotesToShow: state.anecdote
-      .sort((a, b) => b.votes - a.votes)
-      .filter(anecdote => anecdote.content.includes(state.filter))
+    // .sort((a, b) => b.votes - a.votes)
+    // .filter(anecdote => anecdote.content.includes(state.filter))
   }
 }
 
