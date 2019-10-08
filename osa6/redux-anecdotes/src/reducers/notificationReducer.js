@@ -1,16 +1,20 @@
 const reducer = (state = '', action) => {
-  console.log('notification state', state)
-  console.log('action', action)
-  console.log('action', action.data)
-
   switch (action.type) {
     case 'SET_STATUS':
       return (state = action.data)
+    case 'GET_STATUS':
+      return state
     case 'HIDE_STATUS':
       return (state = action.data)
 
     default:
       return state
+  }
+}
+
+export const getStatus = () => {
+  return {
+    type: 'GET_STATUS'
   }
 }
 
@@ -29,7 +33,6 @@ export const hideNotification = () => {
 }
 
 export const voteNotification = notification => {
-  console.log(notification)
   return {
     type: 'SET_STATUS',
     data: `Voted for ${notification}`

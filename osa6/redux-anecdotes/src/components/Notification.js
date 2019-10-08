@@ -1,4 +1,6 @@
 import React from 'react'
+import { getStatus } from '../reducers/notificationReducer'
+import { connect } from 'react-redux'
 
 const Notification = props => {
   const style = {
@@ -6,11 +8,23 @@ const Notification = props => {
     padding: 10,
     borderWidth: 1
   }
-  const notification = props.store.getState().notification
-  const hide = () => <div></div>
-  const show = () => <div style={style}>{notification}</div>
+  const hide = () => {
+    return <div></div>
+  }
+  const show = () => {
+    return <div style={style}>{props.notification}</div>
+  }
 
-  return <div>{notification === '' ? hide() : show()}</div>
+  return <div>{props.notification === '' ? hide() : show()}</div>
 }
 
-export default Notification
+const mapStatesToProps = state => {
+  return {
+    notification: state.notification
+  }
+}
+
+export default connect(
+  mapStatesToProps,
+  { getStatus }
+)(Notification)
