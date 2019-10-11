@@ -7,6 +7,7 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import CreateNewBlog from './components/CreateNewBlog'
 import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs, createNewBlog } from './reducers/blogReducer'
 import './styles.css'
 import { connect } from 'react-redux'
 
@@ -19,10 +20,9 @@ const App = props => {
 
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
+
   useEffect(() => {
-    blogService.getAll().then(initialBlogs => {
-      setBlogs(initialBlogs)
-    })
+    props.initializeBlogs()
   }, [])
 
   useEffect(() => {
@@ -89,13 +89,7 @@ const App = props => {
   }
 
   const rows = () => {
-    blogs.sort(function(a, b) {
-      if (a.likes > b.likes) return -1
-      if (a.likes < b.likes) return 1
-
-      return 0
-    })
-    return blogs.map(blog => (
+    return props.blogs.map(blog => (
       <Blog
         key={blog.id}
         blog={blog}
@@ -143,9 +137,8 @@ const App = props => {
       likes: 0
     }
 
-    const newBlog = await blogService.create(blogObject)
-    setBlogs(blogs.concat(newBlog))
-    props.setNotification(`done a new blog ${title.value}`, 5)
+    props.createNewBlog(blogObject)
+    props.setNotification(`done a new blog ${title.value} added`, 5)
     resetTitle()
     resetAuthor()
     resetUrl()
@@ -194,10 +187,11 @@ const App = props => {
 }
 
 const mapStateToProps = state => ({
-  notification: state.notification
+  notification: state.notification,
+  blogs: state.blog
 })
 
 export default connect(
   mapStateToProps,
-  { setNotification }
+  { setNotification, initializeBlogs, createNewBlog }
 )(App)
