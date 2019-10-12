@@ -7,6 +7,7 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import CreateNewBlog from './components/CreateNewBlog'
 import { setNotification } from './reducers/notificationReducer'
+import { setupUser, logoutUser } from './reducers/userReducer'
 import { initializeBlogs, createNewBlog } from './reducers/blogReducer'
 import './styles.css'
 import { connect } from 'react-redux'
@@ -19,7 +20,6 @@ const App = props => {
   const { props: url, reset: resetUrl } = useField('text')
 
   const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
 
   useEffect(() => {
     props.initializeBlogs()
@@ -29,15 +29,15 @@ const App = props => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      props.setupUser(user)
+      blogService.setToken(props.user.token)
     }
   }, [])
 
   const handleLogOut = () => {
     props.setNotification('done succesfully logged out', 5)
     window.localStorage.clear()
-    setUser(null)
+    props.logoutUser()
   }
 
   const handleSubmit = async event => {
@@ -51,8 +51,7 @@ const App = props => {
         password
       })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-
-      setUser(user)
+      props.setupUser(user)
       resetUsername()
       resetPassword()
       props.setNotification('done log in successful', 5)
@@ -88,18 +87,6 @@ const App = props => {
     }
   }
 
-  const rows = () => {
-    return props.blogs.map(blog => (
-      <Blog
-        key={blog.id}
-        blog={blog}
-        handleRemoval={handleRemoval}
-        handleLikes={handleLikes}
-        user={user}
-      />
-    ))
-  }
-
   const loginForm = () => {
     return (
       <div>
@@ -118,11 +105,11 @@ const App = props => {
     return (
       <div>
         <p>
-          {user.name} logged in{' '}
+          {props.user.name} logged in{' '}
           <button onClick={() => handleLogOut()}>log out</button>
         </p>
         {createNewBlogForm()}
-        {rows()}
+        <Blog handleRemoval={handleRemoval} handleLikes={handleLikes} />
       </div>
     )
   }
@@ -169,9 +156,6 @@ const App = props => {
     const message = props.notification.substring(5)
     const error = props.notification.substring(0, 4)
 
-    console.log(message)
-    console.log(error)
-
     return <div className={error}>{message}</div>
   }
 
@@ -181,17 +165,18 @@ const App = props => {
         <h1>Blogs</h1>
         {notification()}
       </div>
-      {user === null ? loginForm() : loggedIn()}
+      {props.user.name === '' ? loginForm() : loggedIn()}
     </div>
   )
 }
 
 const mapStateToProps = state => ({
   notification: state.notification,
-  blogs: state.blog
+  blogs: state.blog,
+  user: state.user
 })
 
 export default connect(
   mapStateToProps,
-  { setNotification, initializeBlogs, createNewBlog }
+  { setNotification, initializeBlogs, createNewBlog, setupUser, logoutUser }
 )(App)
