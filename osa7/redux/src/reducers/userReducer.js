@@ -1,5 +1,3 @@
-import loginService from '../services/login'
-
 const initialState = {
   name: '',
   username: '',

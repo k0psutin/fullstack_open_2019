@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 const baseUrl = '/api/blogs'
 
 let token = null
@@ -19,6 +20,8 @@ const remove = async id => {
   const config = {
     headers: { Authorization: token }
   }
+
+  console.log(config)
   const reponse = await axios.delete(`${baseUrl}/${id}`, config)
   return reponse.data
 }
@@ -29,12 +32,14 @@ const getAll = () => {
 }
 
 const get = async (id, newObject) => {
-  const response = axios.get(`${baseUrl}/${id}`, newObject)
+  const response = await axios.get(`${baseUrl}/${id}`, newObject)
   return response.data
 }
 
-const update = async (id, newObject) => {
-  const response = axios.put(`${baseUrl}/${id}`, newObject)
+const update = async newObject => {
+  console.log(newObject)
+  const response = await axios.put(`${baseUrl}/${newObject.id}`, newObject)
+  console.log(response.data)
   return response.data
 }
 
