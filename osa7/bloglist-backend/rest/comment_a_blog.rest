@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/blogs/5d99bf56358e62065077fc2d/comments
+Content-Type: application/json
+
+{
+    "comment": "Hyvä artikkeli!",
+    "blog_id": "5d99bf56358e62065077fc2d"
+}
