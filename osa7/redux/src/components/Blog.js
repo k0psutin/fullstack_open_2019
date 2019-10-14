@@ -1,13 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../styles.css'
 import { connect } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { removeBlog, likeBlog } from '../reducers/blogReducer'
+import commentService from '../services/comments'
+import { bindActionCreators } from 'redux'
 // import PropTypes from 'prop-types'
 
 const Blog = ({ id, blogs, user }) => {
-  console.log('Blogs:', blogs)
-  console.log('Id', id)
+  const [comments, setComments] = useState([])
+  const [comment, setComment] = useState('')
+
+  useEffect(() => {
+    commentService.getAll(id).then(response => {
+      setComments(response.filter(data => data.blog_id === id))
+    })
+  }, [])
 
   if (!blogs) {
     return null
@@ -47,7 +55,17 @@ const Blog = ({ id, blogs, user }) => {
 
     const blog = blogs.find(blog => blog.id === id)
 
-    console.log(blogs)
+    const createComment = async (event, id) => {
+      event.preventDefault()
+      const newComment = {
+        comment: comment,
+        blog_id: blog.id
+      }
+
+      const returned = await commentService.create(id, newComment)
+      setComments(comments.concat(returned))
+      setComment('')
+    }
 
     return (
       <div>
@@ -63,6 +81,20 @@ const Blog = ({ id, blogs, user }) => {
         ) : (
           ''
         )}
+        <div>
+          <h2>comments</h2>
+          <form name="newComment" onSubmit={createComment}>
+            <input
+              type="text"
+              value={comment}
+              onChange={({ target }) => setComment(target.value)}
+            />
+            <button type="submit">add comment</button>
+          </form>
+          {comments.map(data => (
+            <li key={data.id}>{data.comment}</li>
+          ))}
+        </div>
       </div>
     )
   }
@@ -77,12 +109,17 @@ Blog.propTypes = {
 }
 */
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ setNotification, removeBlog, likeBlog }, dispatch)
+}
+
 const mapStateToProps = state => ({
   blogs: state.blog,
-  user: state.user
+  user: state.user,
+  props: state.dispatch
 })
 
 export default connect(
   mapStateToProps,
-  { setNotification, removeBlog, likeBlog }
+  mapDispatchToProps
 )(Blog)
