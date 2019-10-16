@@ -29,15 +29,15 @@ const Blog = ({ id, blogs, user }) => {
           removeBlog(id, user.token)
           setNotification(
             { code: 'done', message: ` Blog ${blog.title} removed` },
-            5
+            5,
           )
         } catch (exception) {
           setNotification(
             {
               code: 'errr',
-              message: `You're not authorized to remove ${blog.title}`
+              message: `You're not authorized to remove ${blog.title}`,
             },
-            5
+            5,
           )
         }
       }
@@ -59,7 +59,7 @@ const Blog = ({ id, blogs, user }) => {
       event.preventDefault()
       const newComment = {
         comment: comment,
-        blog_id: blog.id
+        blog_id: blog.id,
       }
 
       const returned = await commentService.create(id, newComment)
@@ -116,10 +116,10 @@ function mapDispatchToProps(dispatch) {
 const mapStateToProps = state => ({
   blogs: state.blog,
   user: state.user,
-  props: state.dispatch
+  props: state.dispatch,
 })
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Blog)

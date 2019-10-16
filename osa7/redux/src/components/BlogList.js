@@ -28,10 +28,10 @@ const BlogList = props => {
 const mapStateToProps = state => ({
   notification: state.notification,
   blogs: state.blog,
-  user: state.user
+  user: state.user,
 })
 
 export default connect(
   mapStateToProps,
-  { likeBlog, removeBlog, setNotification }
+  { likeBlog, removeBlog, setNotification },
 )(BlogList)

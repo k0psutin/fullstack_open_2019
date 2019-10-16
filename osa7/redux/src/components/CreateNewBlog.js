@@ -11,14 +11,14 @@ const CreateNewBlog = props => {
     const newBlog = {
       title: event.target.title.value,
       author: event.target.author.value,
-      url: event.target.url.value
+      url: event.target.url.value,
     }
 
     blogService.setToken(props.user.token)
     props.createNewBlog(newBlog)
     props.setNotification(
       `done a new blog ${event.target.title.value} added`,
-      5
+      5,
     )
   }
 
@@ -43,7 +43,7 @@ const CreateNewBlog = props => {
     </Container>
   )
 }
-/* 
+/*
 CreateNewBlog.propTypes = {
   createNewBlog: PropTypes.func.isRequired,
   author: PropTypes.string.isRequired,
@@ -56,10 +56,10 @@ CreateNewBlog.propTypes = {
 
 const mapStateToProps = state => ({
   blogForm: state.blogForm,
-  user: state.user
+  user: state.user,
 })
 
 export default connect(
   mapStateToProps,
-  { createNewBlog, setNotification }
+  { createNewBlog, setNotification },
 )(CreateNewBlog)

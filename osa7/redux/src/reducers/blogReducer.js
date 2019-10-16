@@ -26,7 +26,7 @@ export const initializeBlogs = () => {
     const blog = await blogService.getAll()
     dispatch({
       blog,
-      type: 'INIT_BLOG'
+      type: 'INIT_BLOG',
     })
   }
 }
@@ -37,7 +37,7 @@ export const removeBlog = (id, token) => {
     await blogService.remove(id)
     dispatch({
       type: 'REMOVE_BLOG',
-      id
+      id,
     })
   }
 }
@@ -49,7 +49,7 @@ export const likeBlog = likedBlog => {
     console.log(blog)
     dispatch({
       type: 'LIKED_BLOG',
-      blog
+      blog,
     })
   }
 }
@@ -59,7 +59,7 @@ export const createNewBlog = content => {
     const newBlog = await blogService.create(content)
     dispatch({
       blog: newBlog,
-      type: 'NEW_BLOG'
+      type: 'NEW_BLOG',
     })
   }
 }

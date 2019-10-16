@@ -16,7 +16,7 @@ const LoginForm = props => {
     try {
       const user = await loginService.login({
         username,
-        password
+        password,
       })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       props.setupUser(user)
@@ -24,7 +24,7 @@ const LoginForm = props => {
     } catch (exception) {
       props.setNotification(
         { message: 'wrong username or password', code: 'errr' },
-        5
+        5,
       )
     }
   }
@@ -57,5 +57,5 @@ const LoginForm = props => {
 
 export default connect(
   null,
-  { setupUser, setNotification }
+  { setupUser, setNotification },
 )(LoginForm)

@@ -38,10 +38,10 @@ const App = props => {
 const mapStateToProps = state => ({
   notification: state.notification,
   blogs: state.blog,
-  user: state.user
+  user: state.user,
 })
 
 export default connect(
   mapStateToProps,
-  { setNotification, initializeBlogs, createNewBlog, setupUser, logoutUser }
+  { setNotification, initializeBlogs, createNewBlog, setupUser, logoutUser },
 )(App)

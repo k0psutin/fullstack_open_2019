@@ -9,10 +9,10 @@ const Users = props => {
       return {
         id: val.user.id,
         name: val.user.name,
-        count: props.blogs.filter(blog => blog.user.id === val.user.id).length
+        count: props.blogs.filter(blog => blog.user.id === val.user.id).length,
       }
     }),
-    'id'
+    'id',
   )
 
   const sortList = () => _.orderBy(users, ['count'], ['desc'])
@@ -43,7 +43,7 @@ const Users = props => {
 }
 
 const mapStateToProps = state => ({
-  blogs: state.blog
+  blogs: state.blog,
 })
 
 export default connect(mapStateToProps)(Users)

@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { logoutUser } from '../reducers/userReducer'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import { Container, Button, Menu } from 'semantic-ui-react'
+import { Container, Menu } from 'semantic-ui-react'
 
 import '../styles.css'
 
@@ -16,7 +16,7 @@ const LoggedIn = props => {
   const handleLogOut = () => {
     props.setNotification(
       { message: 'succesfully logged out', code: 'done' },
-      5
+      5,
     )
     window.localStorage.clear()
     props.logoutUser()
@@ -56,10 +56,10 @@ const LoggedIn = props => {
 
 const mapStateToProps = state => ({
   user: state.user,
-  blogs: state.blog
+  blogs: state.blog,
 })
 
 export default connect(
   mapStateToProps,
-  { logoutUser, setNotification }
+  { logoutUser, setNotification },
 )(LoggedIn)
