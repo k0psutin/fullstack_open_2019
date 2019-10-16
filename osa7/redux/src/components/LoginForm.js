@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { setupUser } from '../reducers/userReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import loginService from '../services/login'
+import { Form, Button } from 'semantic-ui-react'
 
 // import PropTypes from 'prop-types'
 
@@ -31,17 +32,17 @@ const LoginForm = props => {
   return (
     <div>
       <h2>log in to application</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          username
+      <Form onSubmit={handleSubmit}>
+        <Form.Field>
+          <label>username</label>
           <input name="username" />
-        </div>
-        <div>
-          password
+        </Form.Field>
+        <Form.Field>
+          <label>password</label>
           <input name="password" type="password" />
-        </div>
-        <button type="submit">login</button>
-      </form>
+        </Form.Field>
+        <Button type="submit">login</Button>
+      </Form>
     </div>
   )
 }

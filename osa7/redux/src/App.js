@@ -8,6 +8,7 @@ import { setNotification } from './reducers/notificationReducer'
 import { setupUser, logoutUser } from './reducers/userReducer'
 import { initializeBlogs, createNewBlog } from './reducers/blogReducer'
 import { connect } from 'react-redux'
+import { Container } from 'semantic-ui-react'
 
 const App = props => {
   useEffect(() => {
@@ -24,13 +25,13 @@ const App = props => {
   }, [])
 
   return (
-    <div className="main">
+    <Container>
       <div>
         <h1>Blogs</h1>
         <Notification />
       </div>
       <div>{props.user.name === '' ? <Login /> : <LoggedIn />}</div>
-    </div>
+    </Container>
   )
 }
 

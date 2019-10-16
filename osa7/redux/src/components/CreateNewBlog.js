@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import blogService from '../services/blogs'
 import { createNewBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { Form, Button, Container } from 'semantic-ui-react'
 
 const CreateNewBlog = props => {
   const sendNewBlog = async event => {
@@ -22,24 +23,24 @@ const CreateNewBlog = props => {
   }
 
   return (
-    <div>
+    <Container>
       <h2>create new</h2>
-      <form name="blog" onSubmit={sendNewBlog}>
-        <div>
-          title:
+      <Form name="blog" onSubmit={sendNewBlog}>
+        <Form.Field>
+          <label>title:</label>
           <input name="title" />
-        </div>
-        <div>
-          author:
+        </Form.Field>
+        <Form.Field>
+          <label>author:</label>
           <input name="author" />
-        </div>
-        <div>
-          url:
+        </Form.Field>
+        <Form.Field>
+          <label>url:</label>
           <input name="url" />
-        </div>
-        <button type="submit">create</button>
-      </form>
-    </div>
+        </Form.Field>
+        <Button type="submit">create</Button>
+      </Form>
+    </Container>
   )
 }
 /* 

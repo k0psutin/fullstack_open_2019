@@ -4,18 +4,25 @@ import { connect } from 'react-redux'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { Link } from 'react-router-dom'
+import { Container, Table } from 'semantic-ui-react'
 
 const BlogList = props => {
   const blogList = () =>
     props.blogs.map(blog => (
-      <p key={blog.id}>
+      <Table.Row key={blog.id}>
         <Link to={`/blogs/${blog.id}`}>
           {blog.title} {blog.author}
         </Link>
-      </p>
+      </Table.Row>
     ))
 
-  return <div>{blogList()}</div>
+  return (
+    <Container>
+      <Table striped celled>
+        <Table.Body>{blogList()}</Table.Body>
+      </Table>
+    </Container>
+  )
 }
 
 const mapStateToProps = state => ({

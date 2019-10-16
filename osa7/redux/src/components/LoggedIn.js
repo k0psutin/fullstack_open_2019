@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { logoutUser } from '../reducers/userReducer'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { Container, Button, Menu } from 'semantic-ui-react'
 
 import '../styles.css'
 
@@ -22,19 +23,23 @@ const LoggedIn = props => {
   }
 
   return (
-    <div>
+    <Container>
       <Router>
         <div>
-          <p className="linkSection">
-            <Link className="link" to={'/'}>
-              blogs
-            </Link>
-            <Link className="link" to={'/users/'}>
-              users
-            </Link>
-            {props.user.name} logged in
-            <button onClick={() => handleLogOut()}>log out</button>
-          </p>
+          <Menu inverted>
+            <Menu.Item link>
+              <Link className="link" to={'/'}>
+                blogs
+              </Link>
+            </Menu.Item>
+            <Menu.Item link>
+              <Link className="link" to={'/users/'}>
+                users
+              </Link>
+            </Menu.Item>
+            <Menu.Item>{props.user.name} logged in</Menu.Item>
+            <Menu.Item onClick={() => handleLogOut()}>log out</Menu.Item>
+          </Menu>
           <CreateNewBlogForm />
         </div>
         <Route exact path="/" render={() => <BlogList />} />
@@ -45,7 +50,7 @@ const LoggedIn = props => {
         />
         <Route exact path="/users/" render={() => <UserList />} />
       </Router>
-    </div>
+    </Container>
   )
 }
 
