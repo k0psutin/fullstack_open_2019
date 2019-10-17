@@ -29,15 +29,15 @@ const Blog = ({ id, blogs, user }) => {
           removeBlog(id, user.token)
           setNotification(
             { code: 'done', message: ` Blog ${blog.title} removed` },
-            5,
+            5
           )
         } catch (exception) {
           setNotification(
             {
               code: 'errr',
-              message: `You're not authorized to remove ${blog.title}`,
+              message: `You're not authorized to remove ${blog.title}`
             },
-            5,
+            5
           )
         }
       }
@@ -59,7 +59,7 @@ const Blog = ({ id, blogs, user }) => {
       event.preventDefault()
       const newComment = {
         comment: comment,
-        blog_id: blog.id,
+        blog_id: blog.id
       }
 
       const returned = await commentService.create(id, newComment)
@@ -73,23 +73,26 @@ const Blog = ({ id, blogs, user }) => {
         <p>{blog.url}</p>
         <p>
           {blog.likes} likes.
-          <button onClick={() => handleLikes(blog.id)}>like</button>
+          <button id='like' onClick={() => handleLikes(blog.id)}>
+            like
+          </button>
         </p>
         <p>added by: {blog.user.name}</p>
         {user.username === blog.user.username ? (
-          <Delete blog={blog} handleRemoval={handleRemoval} />
+          <Delete id='delete' blog={blog} handleRemoval={handleRemoval} />
         ) : (
           ''
         )}
         <div>
           <h2>comments</h2>
-          <form name="newComment" onSubmit={createComment}>
+          <form name='newComment' onSubmit={createComment}>
             <input
-              type="text"
+              id='comment'
+              type='text'
               value={comment}
               onChange={({ target }) => setComment(target.value)}
             />
-            <button type="submit">add comment</button>
+            <button type='submit'>add comment</button>
           </form>
           {comments.map(data => (
             <li key={data.id}>{data.comment}</li>
@@ -107,10 +110,10 @@ function mapDispatchToProps(dispatch) {
 const mapStateToProps = state => ({
   blogs: state.blog,
   user: state.user,
-  props: state.dispatch,
+  props: state.dispatch
 })
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Blog)

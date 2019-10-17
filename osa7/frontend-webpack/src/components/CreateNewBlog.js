@@ -11,34 +11,36 @@ const CreateNewBlog = props => {
     const newBlog = {
       title: event.target.title.value,
       author: event.target.author.value,
-      url: event.target.url.value,
+      url: event.target.url.value
     }
 
     blogService.setToken(props.user.token)
     props.createNewBlog(newBlog)
     props.setNotification(
       `done a new blog ${event.target.title.value} added`,
-      5,
+      5
     )
   }
 
   return (
     <Container>
       <h2>create new</h2>
-      <Form name="blog" onSubmit={sendNewBlog}>
+      <Form name='blog' onSubmit={sendNewBlog}>
         <Form.Field>
           <label>title:</label>
-          <input name="title" />
+          <input id='title' name='title' />
         </Form.Field>
         <Form.Field>
           <label>author:</label>
-          <input name="author" />
+          <input id='author' name='author' />
         </Form.Field>
         <Form.Field>
           <label>url:</label>
-          <input name="url" />
+          <input id='url' name='url' />
         </Form.Field>
-        <Button type="submit">create</Button>
+        <Button id='submit_blog' type='submit'>
+          create
+        </Button>
       </Form>
     </Container>
   )
@@ -56,10 +58,10 @@ CreateNewBlog.propTypes = {
 
 const mapStateToProps = state => ({
   blogForm: state.blogForm,
-  user: state.user,
+  user: state.user
 })
 
 export default connect(
   mapStateToProps,
-  { createNewBlog, setNotification },
+  { createNewBlog, setNotification }
 )(CreateNewBlog)

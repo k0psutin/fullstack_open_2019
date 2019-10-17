@@ -11,7 +11,7 @@ const BlogList = props => {
     props.blogs.map(blog => (
       <Table.Row key={blog.id}>
         <Table.Cell>
-          <Link to={`/blogs/${blog.id}`}>
+          <Link id='blog' to={`/blogs/${blog.id}`}>
             {blog.title} {blog.author}
           </Link>
         </Table.Cell>

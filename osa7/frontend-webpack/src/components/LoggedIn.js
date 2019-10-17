@@ -16,7 +16,7 @@ const LoggedIn = props => {
   const handleLogOut = () => {
     props.setNotification(
       { message: 'succesfully logged out', code: 'done' },
-      5,
+      5
     )
     window.localStorage.clear()
     props.logoutUser()
@@ -28,27 +28,29 @@ const LoggedIn = props => {
         <div>
           <Menu inverted>
             <Menu.Item link>
-              <Link className="link" to={'/'}>
+              <Link className='link' to={'/'}>
                 blogs
               </Link>
             </Menu.Item>
             <Menu.Item link>
-              <Link className="link" to={'/users/'}>
+              <Link className='link' to={'/users/'}>
                 users
               </Link>
             </Menu.Item>
             <Menu.Item>{props.user.name} logged in</Menu.Item>
-            <Menu.Item onClick={() => handleLogOut()}>log out</Menu.Item>
+            <Menu.Item onClick={() => handleLogOut()} id='logout'>
+              log out
+            </Menu.Item>
           </Menu>
           <CreateNewBlogForm />
         </div>
-        <Route exact path="/" render={() => <BlogList />} />
+        <Route exact path='/' render={() => <BlogList />} />
         <Route
           exact
-          path="/blogs/:id"
+          path='/blogs/:id'
           render={({ match }) => <Blog id={match.params.id} />}
         />
-        <Route exact path="/users/" render={() => <UserList />} />
+        <Route exact path='/users/' render={() => <UserList />} />
       </Router>
     </Container>
   )
@@ -56,10 +58,10 @@ const LoggedIn = props => {
 
 const mapStateToProps = state => ({
   user: state.user,
-  blogs: state.blog,
+  blogs: state.blog
 })
 
 export default connect(
   mapStateToProps,
-  { logoutUser, setNotification },
+  { logoutUser, setNotification }
 )(LoggedIn)
