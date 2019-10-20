@@ -57,7 +57,6 @@ const EDIT_BIRTHYEAR = gql`
     }
   }
 `
-
 const ALL_BOOKS = gql`
   {
     allBooks {
@@ -98,7 +97,6 @@ const App = () => {
   const [login] = useMutation(LOGIN, { onError: handleError })
   const me = useQuery(ME)
   const authors = useQuery(ALL_AUTHORS)
-  const books = useQuery(ALL_BOOKS)
 
   const [addBook] = useMutation(CREATE_BOOK, {
     onError: handleError,
@@ -139,9 +137,9 @@ const App = () => {
         authors={authors}
         show={page === 'authors'}
       />
-      <Recommend books={books} me={me} show={page === 'recommend'} />
+      <Recommend client={client} me={me} show={page === 'recommend'} />
 
-      <Books books={books} show={page === 'books'} />
+      <Books client={client} show={page === 'books'} />
       <NewBook addBook={addBook} show={page === 'add'} />
       <Login
         login={login}

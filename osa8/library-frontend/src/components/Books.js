@@ -1,8 +1,24 @@
 import React, { useState } from 'react'
+import { gql } from 'apollo-boost'
 
-const Books = props => {
+const FIND_BOOK_BY_GENRE = gql`
+  query findBookByGenre($genre: String!) {
+    allBooks(genre: $genre) {
+      author {
+        name
+        born
+      }
+      title
+      published
+      genres
+    }
+  }
+`
+
+const Books = ({ client, show }) => {
   const [genres, setGenres] = useState([])
   const [filter, setFilter] = useState('')
+  const [filteredBooks, setFilteredBooks] = useState([])
 
   const mapGenres = data =>
     data.map(data =>
@@ -14,22 +30,26 @@ const Books = props => {
       })
     )
 
-  const listBooks = (filter, list) => {
-    if (filter === '') {
-      return list
-    } else {
-      return list.filter(a => a.genres.includes(filter))
-    }
-  }
-
-  if (!props.show) {
+  if (!show) {
     return null
   }
-  if (props.books.loading) {
+  if (!mapGenres) {
     return <div>loading...</div>
   } else {
-    mapGenres(props.books.data.allBooks)
+    const showBooks = async filter => {
+      const { data } = await client.query({
+        query: FIND_BOOK_BY_GENRE,
+        variables: { genre: filter }
+      })
+      setFilteredBooks(data.allBooks)
+    }
 
+    showBooks(filter)
+    mapGenres(filteredBooks)
+
+    if (!showBooks) {
+      return <div>not found</div>
+    }
     return (
       <div>
         <h2>books</h2>
@@ -41,7 +61,7 @@ const Books = props => {
               <th>author</th>
               <th>published</th>
             </tr>
-            {listBooks(filter, props.books.data.allBooks).map(a => (
+            {filteredBooks.map(a => (
               <tr key={a.title}>
                 <td>{a.title}</td>
                 <td>{a.author.name}</td>
