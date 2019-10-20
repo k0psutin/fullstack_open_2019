@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { gql } from 'apollo-boost'
+import { useQuery } from 'react-apollo'
 
 const FIND_BOOK_BY_GENRE = gql`
   query findBookByGenre($genre: String!) {
@@ -18,7 +19,6 @@ const FIND_BOOK_BY_GENRE = gql`
 const Books = ({ client, show }) => {
   const [genres, setGenres] = useState([])
   const [filter, setFilter] = useState('')
-  const [filteredBooks, setFilteredBooks] = useState([])
 
   const mapGenres = data =>
     data.map(data =>
@@ -30,24 +30,24 @@ const Books = ({ client, show }) => {
       })
     )
 
+  const { loading, error, data, refetch } = useQuery(FIND_BOOK_BY_GENRE, {
+    variables: { genre: filter }
+  })
+
+  const onChangeGenre = async genre => {
+    await refetch()
+    setFilter(genre)
+  }
+
   if (!show) {
     return null
   }
-  if (!mapGenres) {
+  if (loading) {
     return <div>loading...</div>
   } else {
-    const showBooks = async filter => {
-      const { data } = await client.query({
-        query: FIND_BOOK_BY_GENRE,
-        variables: { genre: filter }
-      })
-      setFilteredBooks(data.allBooks)
-    }
+    mapGenres(data.allBooks)
 
-    showBooks(filter)
-    mapGenres(filteredBooks)
-
-    if (!showBooks) {
+    if (error) {
       return <div>not found</div>
     }
     return (
@@ -61,7 +61,7 @@ const Books = ({ client, show }) => {
               <th>author</th>
               <th>published</th>
             </tr>
-            {filteredBooks.map(a => (
+            {data.allBooks.map(a => (
               <tr key={a.title}>
                 <td>{a.title}</td>
                 <td>{a.author.name}</td>
@@ -71,11 +71,11 @@ const Books = ({ client, show }) => {
           </tbody>
         </table>
         {genres.map(genre => (
-          <button onClick={() => setFilter(genre)} key={genre}>
+          <button onClick={() => onChangeGenre(genre)} key={genre}>
             {genre}
           </button>
         ))}
-        <button onClick={() => setFilter('')}>show all</button>
+        <button onClick={() => onChangeGenre('')}>show all</button>
       </div>
     )
   }
