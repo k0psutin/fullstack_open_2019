@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 const Authors = props => {
-  const [name, setName] = useState('')
+  const [id, setId] = useState('')
   const [born, setBorn] = useState('')
 
   if (!props.show) {
@@ -10,8 +10,8 @@ const Authors = props => {
 
   const handleSubmit = async event => {
     event.preventDefault()
-    await props.editAuthor({ variables: { name, setBornTo: parseInt(born) } })
-    setName('')
+    await props.editAuthor({ variables: { id, setBornTo: parseInt(born) } })
+    setId('')
     setBorn('')
   }
 
@@ -40,12 +40,9 @@ const Authors = props => {
         <h2>set birthyear</h2>
         <form onSubmit={handleSubmit}>
           <div>
-            <select
-              value={name}
-              onChange={({ target }) => setName(target.value)}
-            >
+            <select value={id} onChange={({ target }) => setId(target.value)}>
               {props.authors.data.allAuthors.map(a => (
-                <option key={a.id} value={a.name}>
+                <option key={a.id} value={a.id}>
                   {a.name}
                 </option>
               ))}

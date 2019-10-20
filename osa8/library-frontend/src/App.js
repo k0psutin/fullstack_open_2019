@@ -2,13 +2,22 @@ import React, { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
+import Login from './components/Login'
 import { gql } from 'apollo-boost'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks'
+
+const LOGIN = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      value
+    }
+  }
+`
 
 const CREATE_BOOK = gql`
   mutation createBook(
     $title: String!
-    $author: String!
+    $author: ID!
     $published: Int!
     $genres: [String!]!
   ) {
@@ -18,7 +27,10 @@ const CREATE_BOOK = gql`
       published: $published
       genres: $genres
     ) {
-      author
+      author {
+        name
+        born
+      }
       title
       published
       genres
@@ -28,8 +40,8 @@ const CREATE_BOOK = gql`
 `
 
 const EDIT_BIRTHYEAR = gql`
-  mutation editAuthor($name: String!, $setBornTo: Int!) {
-    editAuthor(name: $name, setBornTo: $setBornTo) {
+  mutation editAuthor($id: String!, $setBornTo: Int!) {
+    editAuthor(id: $id, setBornTo: $setBornTo) {
       name
       born
       id
@@ -40,7 +52,10 @@ const EDIT_BIRTHYEAR = gql`
 const ALL_BOOKS = gql`
   {
     allBooks {
-      author
+      author {
+        name
+        born
+      }
       title
       published
     }
@@ -59,12 +74,16 @@ const ALL_AUTHORS = gql`
 `
 
 const App = () => {
+  const [token, setToken] = useState(null)
+  const [page, setPage] = useState('authors')
+
+  const client = useApolloClient()
+
   const handleError = error => {
     console.log(error)
   }
 
-  const [page, setPage] = useState('authors')
-
+  const [login] = useMutation(LOGIN, { onError: handleError })
   const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
 
@@ -77,12 +96,26 @@ const App = () => {
     refetchQueries: [{ query: ALL_AUTHORS }]
   })
 
+  const logout = () => {
+    setToken(null)
+    localStorage.clear()
+    client.resetStore()
+  }
+
+  const LogoutButton = () => <button onClick={() => logout()}>logout</button>
+
   return (
     <div>
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
-        <button onClick={() => setPage('add')}>add book</button>
+        {token === null ? null : (
+          <button onClick={() => setPage('add')}>add book</button>
+        )}
+        {token === null ? (
+          <button onClick={() => setPage('login')}>login</button>
+        ) : null}
+        {token === null ? null : LogoutButton()}
       </div>
 
       <Authors
@@ -93,6 +126,12 @@ const App = () => {
 
       <Books books={books} show={page === 'books'} />
       <NewBook addBook={addBook} show={page === 'add'} />
+      <Login
+        login={login}
+        setToken={token => setToken(token)}
+        show={page === 'login'}
+        setPage={setPage}
+      />
     </div>
   )
 }
