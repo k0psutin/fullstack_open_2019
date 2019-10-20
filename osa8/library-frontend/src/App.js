@@ -5,7 +5,12 @@ import NewBook from './components/NewBook'
 import Login from './components/Login'
 import Recommend from './components/Recommend'
 import { gql } from 'apollo-boost'
-import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks'
+import {
+  useQuery,
+  useMutation,
+  useApolloClient,
+  useSubscription
+} from '@apollo/react-hooks'
 
 const ME = gql`
   {
@@ -39,6 +44,7 @@ const CREATE_BOOK = gql`
       author {
         name
         born
+        id
       }
       title
       published
@@ -57,18 +63,37 @@ const EDIT_BIRTHYEAR = gql`
     }
   }
 `
-const ALL_BOOKS = gql`
-  {
-    allBooks {
-      author {
-        name
-        born
-      }
-      title
-      published
-      genres
+
+const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    author {
+      name
+      born
+      id
+    }
+    title
+    published
+    genres
+    id
+  }
+`
+
+const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
     }
   }
+  ${BOOK_DETAILS}
+`
+
+const ALL_BOOKS = gql`
+  {
+    allBooks(genre: "") {
+      ...BookDetails
+    }
+  }
+  ${BOOK_DETAILS}
 `
 
 const ALL_AUTHORS = gql`
@@ -93,6 +118,28 @@ const App = () => {
   const handleError = error => {
     console.log(error)
   }
+
+  const updateCacheWith = bookAdded => {
+    const includedIn = (set, object) => set.map(b => b.id).includes(object.id)
+
+    const dataInStore = client.readQuery({ query: ALL_BOOKS })
+    if (!includedIn(dataInStore.allBooks, bookAdded)) {
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: { allBooks: dataInStore.allBooks.concat(bookAdded) }
+      })
+    }
+  }
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const bookAdded = subscriptionData.data.bookAdded
+      window.alert(
+        `New book added! ${bookAdded.title} by ${bookAdded.author.name}!`
+      )
+      updateCacheWith(bookAdded)
+    }
+  })
 
   const [login] = useMutation(LOGIN, { onError: handleError })
   const me = useQuery(ME)

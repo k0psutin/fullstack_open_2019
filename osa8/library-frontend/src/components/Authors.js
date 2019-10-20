@@ -10,7 +10,9 @@ const Authors = props => {
 
   const handleSubmit = async event => {
     event.preventDefault()
-    await props.editAuthor({ variables: { id, setBornTo: parseInt(born) } })
+    await props.editAuthor({
+      variables: { id: id, setBornTo: parseInt(born) }
+    })
     setId('')
     setBorn('')
   }
@@ -40,7 +42,7 @@ const Authors = props => {
         <h2>set birthyear</h2>
         <form onSubmit={handleSubmit}>
           <div>
-            <select value={id} onChange={({ target }) => setId(target.value)}>
+            <select onChange={({ target }) => setId(target.value)}>
               {props.authors.data.allAuthors.map(a => (
                 <option key={a.id} value={a.id}>
                   {a.name}

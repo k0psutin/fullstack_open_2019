@@ -7,10 +7,12 @@ const FIND_BOOK_BY_GENRE = gql`
       author {
         name
         born
+        id
       }
       title
       published
       genres
+      id
     }
   }
 `
