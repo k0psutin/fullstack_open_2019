@@ -59,6 +59,7 @@ const EDIT_BIRTHYEAR = gql`
     editAuthor(id: $id, setBornTo: $setBornTo) {
       name
       born
+      books
       id
     }
   }
@@ -69,6 +70,7 @@ const BOOK_DETAILS = gql`
     author {
       name
       born
+      books
       id
     }
     title
@@ -101,7 +103,7 @@ const ALL_AUTHORS = gql`
     allAuthors {
       name
       born
-      bookCount
+      books
       id
     }
   }

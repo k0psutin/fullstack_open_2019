@@ -9,7 +9,8 @@ const authorSchema = new mongoose.Schema({
   },
   born: {
     type: Number
-  }
+  },
+  books: [{ type: String }]
 })
 
 authorSchema.plugin(uniqueValidator)

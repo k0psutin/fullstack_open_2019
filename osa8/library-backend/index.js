@@ -22,7 +22,7 @@ const pubsub = new PubSub()
 const typeDefs = gql`
   type Author {
     name: String!
-    bookCount: Int
+    books: [String!]!
     born: Int
     id: ID!
   }
@@ -61,7 +61,12 @@ const typeDefs = gql`
       genres: [String!]!
     ): Book
 
-    addAuthor(name: String!, bookCount: Int, born: Int): Author
+    addAuthor(
+      name: String!
+      books: [String!]!
+      bookCount: Int
+      born: Int
+    ): Author
     editAuthor(id: String!, setBornTo: Int!): Author
 
     createUser(username: String!, favoriteGenre: String!): User
@@ -113,9 +118,6 @@ const resolvers = {
       return context.currentUser
     }
   },
-  Author: {
-    bookCount: root => Book.find({ author: { $eq: root.id } }).countDocuments()
-  },
   Mutation: {
     addBook: async (root, args, { currentUser }) => {
       if (!currentUser) {
@@ -124,19 +126,22 @@ const resolvers = {
       try {
         let author = await Author.findOne({ name: args.author })
 
-        if (!author) {
+        if (author === null) {
           author = await new Author({ name: args.author }).save()
+          author = await Author.findOne({ name: args.author })
+          author.books = []
         }
-
         const newBook = await new Book({ ...args, author: author._id }).save()
 
-        const book = Book.findById(newBook._id).populate('author', {
+        const book = await Book.findById(newBook._id).populate('author', {
           name: 1,
           born: 1,
           id: 1
         })
 
-        console.log(book)
+        author.books = author.books.concat(newBook._id)
+
+        await Author.findByIdAndUpdate(author._id, author)
 
         pubsub.publish('BOOK_ADDED', { bookAdded: book })
 
