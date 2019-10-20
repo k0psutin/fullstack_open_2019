@@ -3,8 +3,17 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
+import Recommend from './components/Recommend'
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks'
+
+const ME = gql`
+  {
+    me {
+      favoriteGenre
+    }
+  }
+`
 
 const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
@@ -58,6 +67,7 @@ const ALL_BOOKS = gql`
       }
       title
       published
+      genres
     }
   }
 `
@@ -74,7 +84,9 @@ const ALL_AUTHORS = gql`
 `
 
 const App = () => {
-  const [token, setToken] = useState(null)
+  const [token, setToken] = useState(
+    localStorage.getItem('library-app-user-token')
+  )
   const [page, setPage] = useState('authors')
 
   const client = useApolloClient()
@@ -84,6 +96,7 @@ const App = () => {
   }
 
   const [login] = useMutation(LOGIN, { onError: handleError })
+  const me = useQuery(ME)
   const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
 
@@ -112,6 +125,9 @@ const App = () => {
         {token === null ? null : (
           <button onClick={() => setPage('add')}>add book</button>
         )}
+        {token === null ? null : (
+          <button onClick={() => setPage('recommend')}>recommendations</button>
+        )}
         {token === null ? (
           <button onClick={() => setPage('login')}>login</button>
         ) : null}
@@ -123,6 +139,7 @@ const App = () => {
         authors={authors}
         show={page === 'authors'}
       />
+      <Recommend books={books} me={me} show={page === 'recommend'} />
 
       <Books books={books} show={page === 'books'} />
       <NewBook addBook={addBook} show={page === 'add'} />
