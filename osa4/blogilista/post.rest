@@ -2,7 +2,7 @@ POST http://localhost:3001/api/blogs HTTP/1.1
 Content-Type: application/json
 
 {
-    "title": "Testitestitesti",
+    "title": 12345,
     "author": "Toimiiko",
     "url": "http://localhost:3001",
     "likes": 0
