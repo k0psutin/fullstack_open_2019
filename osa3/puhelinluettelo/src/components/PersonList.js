@@ -9,7 +9,6 @@ const PersonList = ({ persons, filteredList, setPersons, setErrorMessage}) => {
         if (!isApproved) {
             return
         }
-
        
         personService
           .remove(id)
