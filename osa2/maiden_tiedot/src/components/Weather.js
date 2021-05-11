@@ -1,34 +1,36 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Weather = ( {query} ) => {
-    const [city, setCity] = useState('')
-    const [temperature, setTemperature] = useState('')
-    const [wind, setWind] = useState('')
-    const [pic, setPic] = useState('')
+const Weather = ({ country }) => {
+    const [ weather, setWeather ] = useState(null)
 
-    const cityWeather = `http://api.weatherstack.com/current?access_key=047a2626b00a1360ba82640b2c9e0fb7&query=${query}`
+    const api = process.env.REACT_APP_WEATHER_API
+    const url = `http://api.openweathermap.org/data/2.5/weather?q=${country.capital}&APPID=${api}&units=metric`
 
-  useEffect(() => {
-    axios
-     .get(cityWeather)
-     .then(response => {
-       const wth = response.data
+    useEffect(() => {
+     axios.get(url)
+          .then(response => {
+              setWeather(response.data)
+          })
+    }, [country.capital,url])
 
-       setCity(wth.location.name)
-       setTemperature(wth.current.temperature)
-       setPic(wth.current.weather_icons[0])
-       setWind(`${wth.current.wind_speed} kph direction ${wth.current.wind_dir}`)
-     })
-    },[cityWeather])
+    if (!weather) {
+        return (
+            <div>
+                Loading..
+            </div>
+        )
+    }
 
     return(
-        <div>
-            <h3>Weather in {city} </h3>
-            <p><b>temperature:</b> {temperature} Celsius</p>
-            <p><img alt={city} src={pic}></img></p>
-            <p><b>wind: </b> {wind}</p>
-        </div>
+        <>
+            <h3>Weather in {country.capital} </h3>
+            <p><b>temperature:</b> {weather.main.temp}<span>&#8451;</span> - <b>Feels like: </b> {weather.main.feels_like}<span>&#8451;</span></p>
+            <p><b>temperature min: </b> {weather.main.temp_min}<span>&#8451;</span> <b>temperature max: </b> {weather.main.temp_max}<span>&#8451;</span></p>
+            <p><b>{weather.weather[0].main}</b></p>
+            <p><img alt="icon" src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} /></p>
+            <p><b>wind: </b> {weather.wind.speed} kph </p>
+        </>
     )
 }
 

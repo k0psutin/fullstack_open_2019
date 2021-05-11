@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-import Query from './components/Query'
-import Country from './components/Country'
+import Countries from './components/Countries'
+
+import './style.css'
 
 const App = () => {
-  const [countries, setCountries] = useState([])
-  const [filter, setFilter] = useState('')
+  const [ countryData, setCountryData ] = useState([])
+  const [ filter, setFilter ] = useState('')
 
   useEffect(() => {
     axios
-     .get('https://restcountries.eu/rest/v2/all')
-     .then(response => {
-       setCountries(response.data)
-     })
-    },[])
+      .get(process.env.REACT_APP_COUNTRY_API)
+      .then(response => {
+        setCountryData(response.data)
+      })
+  }, [])
 
-  const handleFilter = (event) => {
-    setFilter(event.target.value)
-  }
+  const filteredData = countryData.filter(country => country.name.toLowerCase().includes(filter.toLowerCase()))
+  const handleFilterChange = (event) => setFilter(event.target.value)
 
   return (
-    <div>
-    <Query filter={filter} handleFilter={handleFilter}/>
-    <Country filter={filter} countries={countries}/>
-    </div>
+    <>
+    find countries
+    <input value={filter} onChange={handleFilterChange} />
+    <Countries filter={filter} filteredData={filteredData} setFilter={setFilter}/>
+    </>
   )
 }
 export default App

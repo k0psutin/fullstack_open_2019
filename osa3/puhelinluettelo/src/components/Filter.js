@@ -1,10 +1,16 @@
 import React from 'react'
 
-const Filter = ( { filter, handleFilter} ) => {
-    return(
+const Filter = (props) => {
+    
+    const handleFilterChange = (event) => props.setNameFilter(event.target.value)
+
+    return (
+        <>
         <div>
-        filter shown with <input value={filter}  onChange={handleFilter}/>
+        filter shown with
+        <input value={props.nameFilter} onChange={handleFilterChange} />
         </div>
+        </>
     )
 }
 

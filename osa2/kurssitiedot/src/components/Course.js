@@ -11,8 +11,8 @@ const Course = ({ course }) => course.map(course =>
     )					
 
 
-const Content = ({ parts }) => parts.map((parts, i) =>
-        <dl key={i}>
+const Content = ({ parts }) => parts.map((parts) =>
+        <dl key={parts.id}>
         <Part part={parts.name} number={parts.exercises}/>
         </dl>
 )
@@ -21,8 +21,6 @@ const Part = ({ part, number }) => <dt>{part} {number}</dt>
 
 const Total = ({ parts }) => {
     const total = parts.reduce((s, p) => s + p.exercises, 0)
-
-    console.log(parts)
     return (
         <div>
         <p><b>total of {total} exercises </b></p>
